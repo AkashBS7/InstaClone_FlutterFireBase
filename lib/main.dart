@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:instaclone_flutterfirebase/responsive/mobile_screen_layout.dart';
 import 'package:instaclone_flutterfirebase/responsive/responsive_layout_screen.dart';
 import 'package:instaclone_flutterfirebase/responsive/web_screen_layout.dart';
+import 'package:instaclone_flutterfirebase/screens/login_screen.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
 
 void main() async {
@@ -33,9 +34,11 @@ class MyApp extends StatelessWidget {
       title: 'InstaClone',
       theme: ThemeData.dark()
           .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-      home: const ResponsiveLayout(
-          mobileScreenLayout: MobileScreenLayout(),
-          webScreenLayout: WebScreenLayout()),
+      // home: const ResponsiveLayout(
+      //   mobileScreenLayout: MobileScreenLayout(),
+      //   webScreenLayout: WebScreenLayout(),
+      // ),
+      home: LoginScreen(),
     );
   }
 }
