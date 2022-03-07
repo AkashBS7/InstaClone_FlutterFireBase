@@ -5,6 +5,7 @@ import 'package:instaclone_flutterfirebase/responsive/mobile_screen_layout.dart'
 import 'package:instaclone_flutterfirebase/responsive/responsive_layout_screen.dart';
 import 'package:instaclone_flutterfirebase/responsive/web_screen_layout.dart';
 import 'package:instaclone_flutterfirebase/screens/login_screen.dart';
+import 'package:instaclone_flutterfirebase/screens/sign_up_screen.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
 
 void main() async {
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       //   mobileScreenLayout: MobileScreenLayout(),
       //   webScreenLayout: WebScreenLayout(),
       // ),
-      home: LoginScreen(),
+      home: SignUpScreen(),
     );
   }
 }
