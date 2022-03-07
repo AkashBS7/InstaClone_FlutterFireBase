@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instaclone_flutterfirebase/resources/auth_methods.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
+import 'package:instaclone_flutterfirebase/utils/utils.dart';
 import 'package:instaclone_flutterfirebase/widgets/text_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -49,16 +52,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPass: true,
                   textInputType: TextInputType.text),
               SizedBox(height: 24),
-              Container(
-                child: const Text('Log In'),
-                width: double.infinity,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: const ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(4)),
+              InkWell(
+                onTap: () {
+                  loginuser();
+                },
+                child: Container(
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : const Text('Log In'),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: const ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    ),
+                    color: blueColor,
                   ),
-                  color: blueColor,
                 ),
               ),
               SizedBox(height: 12),
@@ -86,5 +100,22 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void loginuser() async {
+    setState(() {
+      isLoading = true;
+    });
+    String res = await AuthMethods().loginUser(
+        email: _emailController.text, password: _passwordController.text);
+
+    if (res == 'Success') {
+      print('LOgged in');
+    } else {
+      showSnackBar(context, res);
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 }
