@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instaclone_flutterfirebase/resources/auth_methods.dart';
+import 'package:instaclone_flutterfirebase/responsive/mobile_screen_layout.dart';
+import 'package:instaclone_flutterfirebase/responsive/responsive_layout_screen.dart';
+import 'package:instaclone_flutterfirebase/responsive/web_screen_layout.dart';
+import 'package:instaclone_flutterfirebase/screens/sign_up_screen.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
 import 'package:instaclone_flutterfirebase/utils/utils.dart';
 import 'package:instaclone_flutterfirebase/widgets/text_field.dart';
@@ -86,7 +90,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(width: 3),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SignUpScreen(),
+                      ));
+                    },
                     child: Container(
                       child: const Text('Sign Up',
                           style: TextStyle(fontWeight: FontWeight.bold)),
@@ -110,7 +118,14 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text, password: _passwordController.text);
 
     if (res == 'Success') {
-      print('LOgged in');
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            webScreenLayout: WebScreenLayout(),
+            mobileScreenLayout: MobileScreenLayout(),
+          ),
+        ),
+      );
     } else {
       showSnackBar(context, res);
     }

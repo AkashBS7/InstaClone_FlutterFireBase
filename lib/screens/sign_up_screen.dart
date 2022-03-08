@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instaclone_flutterfirebase/resources/auth_methods.dart';
+import 'package:instaclone_flutterfirebase/responsive/mobile_screen_layout.dart';
+import 'package:instaclone_flutterfirebase/responsive/responsive_layout_screen.dart';
+import 'package:instaclone_flutterfirebase/responsive/web_screen_layout.dart';
+import 'package:instaclone_flutterfirebase/screens/login_screen.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
 import 'package:instaclone_flutterfirebase/utils/utils.dart';
 import 'package:instaclone_flutterfirebase/widgets/text_field.dart';
@@ -123,14 +127,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: const Text('Dont have an account?'),
+                    child: const Text('Already have an account?'),
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   SizedBox(width: 3),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => LoginScreen(),
+                      ));
+                    },
                     child: Container(
-                      child: const Text('Sign Up',
+                      child: const Text('Log In',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
@@ -166,8 +174,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       _isLoading = false;
     });
-    if (res == 'success') {
+    if (res != 'success') {
       showSnackBar(context, res);
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+              webScreenLayout: WebScreenLayout(),
+              mobileScreenLayout: MobileScreenLayout()),
+        ),
+      );
     }
   }
 }
