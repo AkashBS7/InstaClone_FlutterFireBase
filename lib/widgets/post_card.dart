@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instaclone_flutterfirebase/model/user_model.dart';
 import 'package:instaclone_flutterfirebase/providers/user_provider.dart';
 import 'package:instaclone_flutterfirebase/resources/firestore_methods.dart';
 import 'package:instaclone_flutterfirebase/screens/comment_screen.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
+import 'package:instaclone_flutterfirebase/utils/utils.dart';
 import 'package:instaclone_flutterfirebase/widgets/animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,28 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
+  int commentCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getComments();
+  }
+
+  void getComments() async {
+    try {
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('comments')
+          .get();
+      setState(() {
+        commentCount = snap.docs.length;
+      });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +88,11 @@ class _PostCardState extends State<PostCard> {
                                 children: ['Delete']
                                     .map(
                                       (e) => InkWell(
-                                        onTap: () {},
+                                        onTap: () async {
+                                          FireStoreMethods().deletePost(
+                                              widget.snap['postId'], context);
+                                          Navigator.of(context).pop();
+                                        },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 12, horizontal: 16),
@@ -194,11 +222,17 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CommentScreen(snap: widget.snap)));
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
-                      'View all comments',
+                      'View all ${commentCount} comments',
                       style: TextStyle(fontSize: 15, color: secondaryColor),
                     ),
                   ),
