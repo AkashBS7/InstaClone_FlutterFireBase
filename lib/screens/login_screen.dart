@@ -6,6 +6,7 @@ import 'package:instaclone_flutterfirebase/responsive/responsive_layout_screen.d
 import 'package:instaclone_flutterfirebase/responsive/web_screen_layout.dart';
 import 'package:instaclone_flutterfirebase/screens/sign_up_screen.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
+import 'package:instaclone_flutterfirebase/utils/global_variables.dart';
 import 'package:instaclone_flutterfirebase/utils/utils.dart';
 import 'package:instaclone_flutterfirebase/widgets/text_field.dart';
 
@@ -33,7 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: MediaQuery.of(context).size.width > webScreenSize
+              ? EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 3)
+              : const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
