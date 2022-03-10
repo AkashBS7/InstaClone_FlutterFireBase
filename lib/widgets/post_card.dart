@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instaclone_flutterfirebase/model/user_model.dart';
 import 'package:instaclone_flutterfirebase/providers/user_provider.dart';
+import 'package:instaclone_flutterfirebase/resources/firestore_methods.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
 import 'package:instaclone_flutterfirebase/widgets/animation.dart';
 import 'package:intl/intl.dart';
@@ -81,7 +82,12 @@ class _PostCardState extends State<PostCard> {
             //Image
           ),
           GestureDetector(
-            onDoubleTap: () {
+            onDoubleTap: () async {
+              await FireStoreMethods().likePost(
+                widget.snap['postId'],
+                user.uid,
+                widget.snap['likes'],
+              );
               setState(() {
                 isLikeAnimating = true;
               });
@@ -119,11 +125,22 @@ class _PostCardState extends State<PostCard> {
                 isAnimating: widget.snap['likes'].contains(user.uid),
                 smallLike: true,
                 child: IconButton(
-                    icon: const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {}),
+                    icon: widget.snap['likes'].contains(user.uid)
+                        ? const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : const Icon(
+                            Icons.favorite_border,
+                            color: Colors.white,
+                          ),
+                    onPressed: () async {
+                      await FireStoreMethods().likePost(
+                        widget.snap['postId'],
+                        user.uid,
+                        widget.snap['likes'],
+                      );
+                    }),
               ),
               IconButton(icon: const Icon(Icons.comment), onPressed: () {}),
               IconButton(icon: const Icon(Icons.share), onPressed: () {}),
