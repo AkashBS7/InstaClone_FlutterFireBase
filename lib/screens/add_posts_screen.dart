@@ -18,6 +18,7 @@ class AddPostScreen extends StatefulWidget {
 
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
+  bool _isLoading = false;
 
   final TextEditingController descriptionController = TextEditingController();
 
@@ -64,17 +65,33 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   void postImage(String uid, String username, String profImage) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       String res = await FireStoreMethods().uploadPost(
           descriptionController.text, _file!, uid, username, profImage);
       if (res == "Success") {
+        setState(() {
+          _isLoading = false;
+        });
+        clearImage();
         showSnackBar(context, "Posted Successfully");
       } else {
+        setState(() {
+          _isLoading = false;
+        });
         showSnackBar(context, res);
       }
     } catch (e) {
       showSnackBar(context, e.toString());
     }
+  }
+
+  void clearImage() {
+    setState(() {
+      _file = null;
+    });
   }
 
   @override
@@ -102,7 +119,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  Navigator.pop(context);
+                  clearImage();
                 },
               ),
               title: Text('Post to'),
@@ -111,6 +128,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 TextButton(
                   onPressed: () {
                     postImage(user.uid, user.username, user.photoUrl);
+                    descriptionController.text = "";
                   },
                   child: const Text(
                     'Post',
@@ -124,6 +142,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: [
+                _isLoading
+                    ? const LinearProgressIndicator()
+                    : Padding(
+                        padding: EdgeInsets.only(top: 0),
+                      ),
+                const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
