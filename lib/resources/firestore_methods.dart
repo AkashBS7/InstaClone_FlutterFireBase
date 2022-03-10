@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:instaclone_flutterfirebase/model/post.dart';
 import 'package:instaclone_flutterfirebase/resources/storage_methods.dart';
+import 'package:instaclone_flutterfirebase/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreMethods {
@@ -52,5 +54,35 @@ class FireStoreMethods {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future<String> postComment(String postId, String text, String uid,
+      String name, String profilePic, BuildContext context) async {
+    String res = 'Some Error Occured..';
+    try {
+      if (text.isNotEmpty) {
+        String commentId = const Uuid().v1();
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          'text': text,
+          'uid': uid,
+          'name': name,
+          'profilePic': profilePic,
+          'commentId': commentId,
+          'datePublished': DateTime.now(),
+        });
+      } else {
+        res = 'Comment cannot be empty';
+        showSnackBar(context, res);
+      }
+      res = "Success";
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
   }
 }

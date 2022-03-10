@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instaclone_flutterfirebase/model/user_model.dart';
 import 'package:instaclone_flutterfirebase/providers/user_provider.dart';
 import 'package:instaclone_flutterfirebase/resources/firestore_methods.dart';
+import 'package:instaclone_flutterfirebase/screens/comment_screen.dart';
 import 'package:instaclone_flutterfirebase/utils/colors.dart';
 import 'package:instaclone_flutterfirebase/widgets/animation.dart';
 import 'package:intl/intl.dart';
@@ -142,7 +143,14 @@ class _PostCardState extends State<PostCard> {
                       );
                     }),
               ),
-              IconButton(icon: const Icon(Icons.comment), onPressed: () {}),
+              IconButton(
+                  icon: const Icon(Icons.comment),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CommentScreen(
+                              snap: widget.snap,
+                            )));
+                  }),
               IconButton(icon: const Icon(Icons.share), onPressed: () {}),
               Expanded(
                 child: Align(
